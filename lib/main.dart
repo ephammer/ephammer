@@ -18,25 +18,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ephraim Hammer',
       theme: ThemeData(
-        primaryColor: _primaryColor,
-        highlightColor: Colors.transparent,
-        colorScheme: ColorScheme(
-          primary: _primaryColor,
-          primaryVariant: const Color(0xFF3700B3),
-          secondary: Colors.black,
-          secondaryVariant: const Color(0xFF018786),
-          background: Colors.white,
-          surface: Colors.white,
-          onBackground: Colors.black,
-          error: const Color(0xFFB00020),
-          onError: Colors.white,
-          onPrimary: Colors.white,
-          onSecondary: Colors.black,
-          onSurface: Colors.black,
-          brightness: Brightness.light,
-        ),
-        textTheme: GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme)
-      ),
+          primaryColor: _primaryColor,
+          highlightColor: Colors.transparent,
+          colorScheme: ColorScheme(
+            primary: _primaryColor,
+            primaryVariant: const Color(0xFF3700B3),
+            secondary: Colors.black,
+            secondaryVariant: const Color(0xFF018786),
+            background: Colors.white,
+            surface: Colors.white,
+            onBackground: Colors.black,
+            error: const Color(0xFFB00020),
+            onError: Colors.white,
+            onPrimary: Colors.white,
+            onSecondary: Colors.black,
+            onSurface: Colors.black,
+            brightness: Brightness.light,
+          ),
+          textTheme: GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme)),
       home: MyHomePage(title: 'Ephraim Hammer'),
     );
   }
@@ -61,6 +60,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  PageController _pageController;
+
   Widget _getTitleWidget(String title, bool isDesktop, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
@@ -157,51 +158,72 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _bodyPageElements(bool isDesktop) {
     List<Widget> pageElements = [];
 
+    // First Page
     pageElements.add(Column(
-          children: [
-            Expanded(
-              child: Container(
+      children: [
+        Expanded(
+          child: Container(
 //            padding: EdgeInsets.symmetric(
 //                horizontal: (MediaQuery.of(context).size.width) / 8),
-                  height: MediaQuery.of(context).size.height-100,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: _nameWidget(context))),
-                        Expanded(
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: _profilePicWidget(isDesktop)),
-                        ),
-                      ],
-                    ),
+            height: MediaQuery.of(context).size.height - 100,
+            child: Center(
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: _nameWidget(context))),
+                  Expanded(
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _profilePicWidget(isDesktop)),
                   ),
-                ),
+                ],
+              ),
             ),
-            Align(
-                alignment:Alignment.bottomCenter,child: BlinkingArrowAnimation()),
-          ],
-        )
-    );
+          ),
+        ),
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: IconButton(
+                icon: BlinkingArrowAnimation(),
+                onPressed: () {
+                  _pageController.animateToPage(1, curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500) );
+                })),
+      ],
+    ));
 
     // Add Projects
-    pageElements.add(
-        Column(
-          children: [
-            _getTitleWidget("Projects", isDesktop, context),
-            Expanded(
-              child: Container(
-                  padding:EdgeInsets.symmetric(
-                      horizontal: (MediaQuery.of(context).size.width) / 4),
-                  child: ListView(children: Projects().getProjectList(),)),),
-            Align(
-                alignment:Alignment.bottomCenter,child: BlinkingArrowAnimation()),
-          ],
-        )
-    );
+    pageElements.add(Column(
+      children: [
+        Align(
+            alignment: Alignment.topCenter,
+            child: IconButton(
+                icon: BlinkingArrowAnimation(direction: 0,),
+                onPressed: () {
+                  _pageController.animateToPage(0, curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500) );
+                })),
+        _getTitleWidget("Projects", isDesktop, context),
+        Expanded(
+          child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: (MediaQuery.of(context).size.width) / 4),
+              child: ListView(
+                children: Projects().getProjectList(),
+              )),
+        ),
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: IconButton(
+            icon: BlinkingArrowAnimation(),
+            onPressed: () {
+              _pageController.animateToPage(2, curve: Curves.easeIn,
+                  duration: Duration(milliseconds: 500) );
+            })),
+      ],
+    ));
 //    for (var project in Projects().getProjectList()) {
 //      pageElements.add(Container(
 //          padding: (isDesktop)
@@ -211,53 +233,65 @@ class _MyHomePageState extends State<MyHomePage> {
 //          child: project));
 //    }
 
-    pageElements.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _getTitleWidget("Contact", isDesktop, context),
-        Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: (MediaQuery.of(context).size.width) / 4),
-            child: ButtonBar(
-              alignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                FlatButton(
-                  onPressed: () {
-                    sendEmail();
-                  },
-                  child: Text("Email",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary)),
-                ),
-                FlatButton.icon(
-                    onPressed: () {
-                      js.context
-                          .callMethod("open", ["https://github.com/ephammer/"]);
-                    },
-                    icon: Image.asset(
-                      'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
-                      height: 16,
-                      width: 16,
-                    ),
-                    label: Text(
-                      'GitHub',
-                      style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                    )),
+    pageElements.add(Column(
+      children: [
+        Align(
+            alignment: Alignment.topCenter,
+            child: IconButton(
+                icon: BlinkingArrowAnimation(direction: 0,),
+                onPressed: () {
+                  _pageController.animateToPage(1, curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500) );
+                })),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
 
-              ],
-            )),
-            Center(
-                child: Text(
-                  "by Ephraim Hammer",
-                  style: TextStyle(fontSize: 10, color: Colors.black38),
-                ))
-          ],
-        )
-    );
+              _getTitleWidget("Contact", isDesktop, context),
+              Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: (MediaQuery.of(context).size.width) / 4),
+                  child: ButtonBar(
+                    alignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      FlatButton(
+                        onPressed: () {
+                          sendEmail();
+                        },
+                        child: Text("Email",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary)),
+                      ),
+                      FlatButton.icon(
+                          onPressed: () {
+                            js.context
+                                .callMethod("open", ["https://github.com/ephammer/"]);
+                          },
+                          icon: Image.asset(
+                            'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
+                            height: 16,
+                            width: 16,
+                          ),
+                          label: Text(
+                            'GitHub',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          )),
+                    ],
+                  )),
+              Center(
+                  child: Text(
+                "by Ephraim Hammer",
+                style: TextStyle(fontSize: 10, color: Colors.black38),
+              ))
+            ],
+          ),
+        ),
+      ],
+    ));
 
     return pageElements;
   }
@@ -281,54 +315,50 @@ class _MyHomePageState extends State<MyHomePage> {
       pageElements.add(project);
     }
 
-    pageElements.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+    pageElements.add(Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _getTitleWidget("Contact", isDesktop, context),
+        ButtonBar(
+          alignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            _getTitleWidget("Contact", isDesktop, context),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                FlatButton(
-                  onPressed: () {
-                    sendEmail();
-                  },
-                  child: Text("Email",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary)),
-                ),
-                FlatButton.icon(
-                    onPressed: () {
-                      js.context
-                          .callMethod("open", ["https://github.com/ephammer/"]);
-                    },
-                    icon: Image.asset(
-                      'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
-                      height: 16,
-                      width: 16,
-                    ),
-                    label: Text(
-                      'GitHub',
-                      style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                    )),
-
-              ],
+            FlatButton(
+              onPressed: () {
+                sendEmail();
+              },
+              child: Text("Email",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary)),
             ),
-            Center(
-                child: Text(
-                  "by Ephraim Hammer",
-                  style: TextStyle(fontSize: 10, color: Colors.black38),
-                ))
+            FlatButton.icon(
+                onPressed: () {
+                  js.context
+                      .callMethod("open", ["https://github.com/ephammer/"]);
+                },
+                icon: Image.asset(
+                  'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
+                  height: 16,
+                  width: 16,
+                ),
+                label: Text(
+                  'GitHub',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                )),
           ],
-        )
-    );
+        ),
+        Center(
+            child: Text(
+          "by Ephraim Hammer",
+          style: TextStyle(fontSize: 10, color: Colors.black38),
+        ))
+      ],
+    ));
 
     return pageElements;
   }
-
 
   Widget _body(bool isDesktop, BuildContext context) {
     return Padding(
@@ -340,17 +370,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _bodyPage(bool isDesktop, BuildContext context){
-    
+  Widget _bodyPage(bool isDesktop, BuildContext context) {
+    _pageController = PageController();
     return PageView.builder(
+      controller: _pageController,
       physics: BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
-        itemCount: _bodyPageElements(isDesktop).length,
-        itemBuilder: (BuildContext context, int itemIndex) {
-          return _bodyPageElements(isDesktop)[itemIndex];
-        },
+      itemCount: _bodyPageElements(isDesktop).length,
+      itemBuilder: (BuildContext context, int itemIndex) {
+        return _bodyPageElements(isDesktop)[itemIndex];
+      },
     );
-
   }
 
   @override
@@ -373,18 +403,35 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         elevation: 1,
         actions: [
-          Center(child: Padding(
+          Center(
+              child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("בס״ד",textAlign: TextAlign.center,style: GoogleFonts.rubik(),),
+            child: Text(
+              "בס״ד",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.rubik(),
+            ),
           )),
         ],
       ),
-      body: (isDesktop)? _bodyPage(isDesktop, context):_body(isDesktop, context),
+      body: (isDesktop)
+          ? _bodyPage(isDesktop, context)
+          : _body(isDesktop, context),
     );
   }
 }
 
 class BlinkingArrowAnimation extends StatefulWidget {
+  final int ARROW_UP = 0;
+  final int ARROW_DOWN = 1;
+  bool arrowUp;
+
+  BlinkingArrowAnimation({int direction = 1}){
+    switch(direction){
+      case 0: arrowUp =true;break;
+      case 1: arrowUp = false; break;
+    }
+  }
   @override
   _BlinkingAnimationState createState() => _BlinkingAnimationState();
 }
@@ -396,7 +443,7 @@ class _BlinkingAnimationState extends State<BlinkingArrowAnimation>
   @override
   void initState() {
     _animationController =
-    new AnimationController(vsync: this, duration: Duration(seconds: 2));
+        new AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
     super.initState();
   }
@@ -404,9 +451,7 @@ class _BlinkingAnimationState extends State<BlinkingArrowAnimation>
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: _animationController,
-      child: Icon(Icons.keyboard_arrow_down)
-    );
+        opacity: _animationController, child: Icon((widget.arrowUp)?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down));
   }
 
   @override

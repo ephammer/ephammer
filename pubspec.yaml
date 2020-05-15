@@ -46,6 +46,7 @@ assets:
   - assets/
 #  - assets/profilpic.png
   - images/profilpic.png
+  - images/profilpic_transparent.png
 fonts:
   - family: Gilberto
     fonts:

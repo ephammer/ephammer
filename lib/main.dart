@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           onSurface: Colors.black,
           brightness: Brightness.light,
         ),
+        textTheme: GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme)
       ),
       home: MyHomePage(title: 'Ephraim Hammer'),
     );
@@ -63,12 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _getTitleWidget(String title, bool isDesktop, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: (isDesktop) ? (MediaQuery.of(context).size.width) / 4 : 4.0,
+//          left: (isDesktop) ? (MediaQuery.of(context).size.width) / 4 : 4.0,
           bottom: 16.0,
           top: 16.0),
       child: Text(
         title,
         style: GoogleFonts.raleway(fontWeight: FontWeight.bold, fontSize: 34),
+        textAlign: TextAlign.start,
       ),
     );
   }
@@ -82,16 +84,17 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             RichText(
               text: TextSpan(
-                style: GoogleFonts.raleway(
-                    fontSize: 30,color: Theme.of(context).colorScheme.secondary),
-                children: [
-                  TextSpan(text: "Hi, ",style: GoogleFonts.pacifico()),
-                  TextSpan(text: "I am")
-                ]
-              ),
+                  style: GoogleFonts.raleway(
+                      fontSize: 30,
+                      color: Theme.of(context).colorScheme.secondary),
+                  children: [
+                    TextSpan(text: "Hi, ", style: GoogleFonts.pacifico()),
+                    TextSpan(text: "I am")
+                  ]),
             ),
             Text(
               "Ephraim Hammer",
+              textAlign: TextAlign.center,
               style: GoogleFonts.raleway(
                   fontWeight: FontWeight.bold, fontSize: 34),
             ),
@@ -138,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
               shape: BoxShape.circle,
               image: new DecorationImage(
                   fit: BoxFit.cover,
-                  image: new AssetImage('images/profilpic.png')))),
+                  image: new AssetImage('images/profilpic_transparent.png')))),
     );
   }
 
@@ -151,101 +154,203 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  List<Widget> _bodyElements(bool isDesktop) {
+  List<Widget> _bodyPageElements(bool isDesktop) {
     List<Widget> pageElements = [];
 
-    pageElements.add((isDesktop)
-        ? Container(
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: _nameWidget(context))),
-                  Expanded(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _profilePicWidget(isDesktop)),
+    pageElements.add(Column(
+          children: [
+            Expanded(
+              child: Container(
+//            padding: EdgeInsets.symmetric(
+//                horizontal: (MediaQuery.of(context).size.width) / 8),
+                  height: MediaQuery.of(context).size.height-100,
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: _nameWidget(context))),
+                        Expanded(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: _profilePicWidget(isDesktop)),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
             ),
-          )
-        : Column(
-            children: [
-              Center(
-                child: _profilePicWidget(isDesktop),
-              ),
-              _nameWidget(context),
-            ],
-          ));
+            Align(
+                alignment:Alignment.bottomCenter,child: BlinkingArrowAnimation()),
+          ],
+        )
+    );
 
     // Add Projects
-    pageElements.add(_getTitleWidget("Projects", isDesktop, context));
-    for (var project in Projects().getProjectList()) {
-      pageElements.add(Container(
-          padding: (isDesktop)
-              ? EdgeInsets.symmetric(
-                  horizontal: (MediaQuery.of(context).size.width) / 4)
-              : null,
-          child: project));
-    }
-
-    pageElements.add(_getTitleWidget("Contact", isDesktop, context));
-
-    pageElements.add(Container(
-        padding: (isDesktop)
-            ? EdgeInsets.symmetric(
-                horizontal: (MediaQuery.of(context).size.width) / 4)
-            : null,
-        child: ButtonBar(
-          alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
+    pageElements.add(
+        Column(
           children: [
-            FlatButton(
-              onPressed: () {
-                sendEmail();
-              },
-              child: Text("Email",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary)),
-            ),
-            FlatButton.icon(
-                onPressed: () {
-                  js.context
-                      .callMethod("open", ["https://github.com/ephammer/"]);
-                },
-                icon: Image.asset(
-                  'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
-                  height: 16,
-                  width: 16,
-                ),
-                label: Text(
-                  'GitHub',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                )),
+            _getTitleWidget("Projects", isDesktop, context),
+            Expanded(
+              child: Container(
+                  padding:EdgeInsets.symmetric(
+                      horizontal: (MediaQuery.of(context).size.width) / 4),
+                  child: ListView(children: Projects().getProjectList(),)),),
+            Align(
+                alignment:Alignment.bottomCenter,child: BlinkingArrowAnimation()),
           ],
-        )));
+        )
+    );
+//    for (var project in Projects().getProjectList()) {
+//      pageElements.add(Container(
+//          padding: (isDesktop)
+//              ? EdgeInsets.symmetric(
+//                  horizontal: (MediaQuery.of(context).size.width) / 4)
+//              : null,
+//          child: project));
+//    }
 
-    pageElements.add(Center(
-        child: Text(
-      "by Ephraim Hammer",
-      style: TextStyle(fontSize: 10, color: Colors.black38),
-    )));
+    pageElements.add(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _getTitleWidget("Contact", isDesktop, context),
+        Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: (MediaQuery.of(context).size.width) / 4),
+            child: ButtonBar(
+              alignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                FlatButton(
+                  onPressed: () {
+                    sendEmail();
+                  },
+                  child: Text("Email",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary)),
+                ),
+                FlatButton.icon(
+                    onPressed: () {
+                      js.context
+                          .callMethod("open", ["https://github.com/ephammer/"]);
+                    },
+                    icon: Image.asset(
+                      'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
+                      height: 16,
+                      width: 16,
+                    ),
+                    label: Text(
+                      'GitHub',
+                      style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                    )),
+
+              ],
+            )),
+            Center(
+                child: Text(
+                  "by Ephraim Hammer",
+                  style: TextStyle(fontSize: 10, color: Colors.black38),
+                ))
+          ],
+        )
+    );
 
     return pageElements;
   }
+
+  List<Widget> _bodyElements(bool isDesktop) {
+    List<Widget> pageElements = [];
+
+    pageElements.add(Column(
+      children: [
+        Center(
+          child: _profilePicWidget(isDesktop),
+        ),
+        _nameWidget(context),
+      ],
+    ));
+
+    // Add Projects
+    pageElements.add(_getTitleWidget("Projects", isDesktop, context));
+
+    for (var project in Projects().getProjectList()) {
+      pageElements.add(project);
+    }
+
+    pageElements.add(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _getTitleWidget("Contact", isDesktop, context),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                FlatButton(
+                  onPressed: () {
+                    sendEmail();
+                  },
+                  child: Text("Email",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary)),
+                ),
+                FlatButton.icon(
+                    onPressed: () {
+                      js.context
+                          .callMethod("open", ["https://github.com/ephammer/"]);
+                    },
+                    icon: Image.asset(
+                      'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
+                      height: 16,
+                      width: 16,
+                    ),
+                    label: Text(
+                      'GitHub',
+                      style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                    )),
+
+              ],
+            ),
+            Center(
+                child: Text(
+                  "by Ephraim Hammer",
+                  style: TextStyle(fontSize: 10, color: Colors.black38),
+                ))
+          ],
+        )
+    );
+
+    return pageElements;
+  }
+
 
   Widget _body(bool isDesktop, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(
+        physics: BouncingScrollPhysics(),
         children: _bodyElements(isDesktop),
       ),
     );
+  }
+
+  Widget _bodyPage(bool isDesktop, BuildContext context){
+    
+    return PageView.builder(
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+        itemCount: _bodyPageElements(isDesktop).length,
+        itemBuilder: (BuildContext context, int itemIndex) {
+          return _bodyPageElements(isDesktop)[itemIndex];
+        },
+    );
+
   }
 
   @override
@@ -267,7 +372,11 @@ class _MyHomePageState extends State<MyHomePage> {
           style: GoogleFonts.raleway(),
         ),
         elevation: 1,
-//        actions: [
+        actions: [
+          Center(child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text("בס״ד",textAlign: TextAlign.center,style: GoogleFonts.rubik(),),
+          ))
 //          FlatButton(
 //            onPressed: () {},
 //            child: Text("Home"),
@@ -280,9 +389,9 @@ class _MyHomePageState extends State<MyHomePage> {
 //            onPressed: () {},
 //            child: Text("Projects"),
 //          ),
-//        ],
+        ],
       ),
-      body: _body(isDesktop, context),
+      body: (isDesktop)? _bodyPage(isDesktop, context):_body(isDesktop, context),
 //      Container(
 //        decoration: BoxDecoration(
 //          image: DecorationImage(
@@ -413,6 +522,66 @@ class _MyHomePageState extends State<MyHomePage> {
 //          ),
 //        ),
 //      ),
+    );
+  }
+}
+
+class BlinkingArrowAnimation extends StatefulWidget {
+  @override
+  _BlinkingAnimationState createState() => _BlinkingAnimationState();
+}
+
+class _BlinkingAnimationState extends State<BlinkingArrowAnimation>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController =
+    new AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _animationController,
+      child: Icon(Icons.keyboard_arrow_down)
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+}
+
+class PageViewDemo extends StatefulWidget {
+  @override
+  _PageViewDemoState createState() => _PageViewDemoState();
+}
+
+class _PageViewDemoState extends State<PageViewDemo> {
+  PageController _controller = PageController(
+    initialPage: 0,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      scrollDirection: Axis.vertical,
+      controller: _controller,
+      children: [
+
+      ],
     );
   }
 }

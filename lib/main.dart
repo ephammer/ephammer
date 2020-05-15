@@ -282,14 +282,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           )),
                     ],
                   )),
-              Center(
-                  child: Text(
-                "by Ephraim Hammer",
-                style: TextStyle(fontSize: 10, color: Colors.black38),
-              ))
+
             ],
           ),
         ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "by Ephraim Hammer",
+              style: TextStyle(fontSize: 10, color: Colors.black38),
+            ),
+          ),
+        )
       ],
     ));
 

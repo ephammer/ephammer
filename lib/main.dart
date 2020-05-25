@@ -125,6 +125,35 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                 )
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 200,
+                child: RaisedButton(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  onPressed: () {
+                    js.context
+                        .callMethod("open", ["https://ephammer.github.io/kindleNotesApp"]);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+
+                      Text("My Latest Project"),
+//                      Padding(
+//                        padding: const EdgeInsets.all(8.0),
+//                        child: Icon(Icons.arrow_forward_ios,color: Colors.black45,),
+//                      ),
+                    ],
+                  ),
+//              color: Colors.white,
+                ),
+              ),
             )
           ],
         ),
@@ -188,8 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
             child: IconButton(
                 icon: BlinkingArrowAnimation(),
                 onPressed: () {
-                  _pageController.animateToPage(1, curve: Curves.easeIn,
-                      duration: Duration(milliseconds: 500) );
+                  _pageController.animateToPage(1,
+                      curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500));
                 })),
       ],
     ));
@@ -200,10 +230,13 @@ class _MyHomePageState extends State<MyHomePage> {
         Align(
             alignment: Alignment.topCenter,
             child: IconButton(
-                icon: BlinkingArrowAnimation(direction: 0,),
+                icon: BlinkingArrowAnimation(
+                  direction: 0,
+                ),
                 onPressed: () {
-                  _pageController.animateToPage(0, curve: Curves.easeIn,
-                      duration: Duration(milliseconds: 500) );
+                  _pageController.animateToPage(0,
+                      curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500));
                 })),
         _getTitleWidget("Projects", isDesktop, context),
         Expanded(
@@ -217,11 +250,12 @@ class _MyHomePageState extends State<MyHomePage> {
         Align(
             alignment: Alignment.bottomCenter,
             child: IconButton(
-            icon: BlinkingArrowAnimation(),
-            onPressed: () {
-              _pageController.animateToPage(2, curve: Curves.easeIn,
-                  duration: Duration(milliseconds: 500) );
-            })),
+                icon: BlinkingArrowAnimation(),
+                onPressed: () {
+                  _pageController.animateToPage(2,
+                      curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500));
+                })),
       ],
     ));
 //    for (var project in Projects().getProjectList()) {
@@ -238,17 +272,19 @@ class _MyHomePageState extends State<MyHomePage> {
         Align(
             alignment: Alignment.topCenter,
             child: IconButton(
-                icon: BlinkingArrowAnimation(direction: 0,),
+                icon: BlinkingArrowAnimation(
+                  direction: 0,
+                ),
                 onPressed: () {
-                  _pageController.animateToPage(1, curve: Curves.easeIn,
-                      duration: Duration(milliseconds: 500) );
+                  _pageController.animateToPage(1,
+                      curve: Curves.easeIn,
+                      duration: Duration(milliseconds: 500));
                 })),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               _getTitleWidget("Contact", isDesktop, context),
               Container(
                   padding: EdgeInsets.symmetric(
@@ -263,12 +299,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: Text("Email",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary)),
+                                color:
+                                    Theme.of(context).colorScheme.secondary)),
                       ),
                       FlatButton.icon(
                           onPressed: () {
-                            js.context
-                                .callMethod("open", ["https://github.com/ephammer/"]);
+                            js.context.callMethod(
+                                "open", ["https://github.com/ephammer/"]);
                           },
                           icon: Image.asset(
                             'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
@@ -282,7 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           )),
                     ],
                   )),
-
             ],
           ),
         ),
@@ -432,12 +468,17 @@ class BlinkingArrowAnimation extends StatefulWidget {
   final int ARROW_DOWN = 1;
   bool arrowUp;
 
-  BlinkingArrowAnimation({int direction = 1}){
-    switch(direction){
-      case 0: arrowUp =true;break;
-      case 1: arrowUp = false; break;
+  BlinkingArrowAnimation({int direction = 1}) {
+    switch (direction) {
+      case 0:
+        arrowUp = true;
+        break;
+      case 1:
+        arrowUp = false;
+        break;
     }
   }
+
   @override
   _BlinkingAnimationState createState() => _BlinkingAnimationState();
 }
@@ -457,7 +498,10 @@ class _BlinkingAnimationState extends State<BlinkingArrowAnimation>
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-        opacity: _animationController, child: Icon((widget.arrowUp)?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down));
+        opacity: _animationController,
+        child: Icon((widget.arrowUp)
+            ? Icons.keyboard_arrow_up
+            : Icons.keyboard_arrow_down));
   }
 
   @override

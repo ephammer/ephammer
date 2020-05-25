@@ -36,7 +36,7 @@ class Projects extends StatelessWidget {
         'Android application that makes use of the users geolocation and an external library to calculate the time of nightfall according to jewish law and send a reminder to the user. This app is published in the Google Play Store.',
         'https://github.com/ephammer/MP_intro_sotware_engineering'));
     projects.reversed.toList();
-    return projects;
+    return projects.reversed.toList();
   }
 
   Widget getProjectCard(String title, String description, String githubUrl,

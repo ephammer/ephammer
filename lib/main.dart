@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:portofolio_page/projects.dart';
 import 'package:portofolio_page/tools/adaptive.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portofolio_page/tools/utils.dart';
 import 'dart:js' as js;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:auto_animated/auto_animated.dart';
+import 'package:delayed_display/delayed_display.dart';
 
 void main() => runApp(MyApp());
 
@@ -61,6 +66,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   PageController _pageController;
+  final Duration initialDelay = Duration(seconds: 1);
 
   Widget _getTitleWidget(String title, bool isDesktop, BuildContext context) {
     return Padding(
@@ -83,78 +89,120 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RichText(
-              text: TextSpan(
-                  style: GoogleFonts.raleway(
-                      fontSize: 30,
-                      color: Theme.of(context).colorScheme.secondary),
-                  children: [
-                    TextSpan(text: "Hi, ", style: GoogleFonts.pacifico()),
-                    TextSpan(text: "I am")
-                  ]),
-            ),
-            Text(
-              "Ephraim Hammer",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.raleway(
-                  fontWeight: FontWeight.bold, fontSize: 34),
-            ),
-            ButtonBar(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FlatButton.icon(
-                    onPressed: () {
-                      js.context
-                          .callMethod("open", ["https://github.com/ephammer/"]);
-                    },
-                    icon: Image.asset(
-                      'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
-                      height: 16,
-                      width: 16,
-                    ),
-                    label: Text(
-                      'GitHub',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
-                    )),
-                RaisedButton(
-                  onPressed: () {
-                    sendEmail();
-                  },
-                  child: Text("Contact Me"),
-                  color: Colors.white,
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 200,
-                child: RaisedButton(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  onPressed: () {
-                    js.context
-                        .callMethod("open", ["https://ephammer.github.io/kindleNotesApp"]);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+            DelayedDisplay(
+              delay: initialDelay,
+              child: RichText(
+                text: TextSpan(
+                    style: GoogleFonts.raleway(
+                        fontSize: 30,
+                        color: Theme.of(context).colorScheme.secondary),
                     children: [
-
-                      Text("My Latest Project"),
+                      TextSpan(text: "Hi, ", style: GoogleFonts.pacifico()),
+                      TextSpan(text: "I am")
+                    ]),
+              ),
+            ),
+            DelayedDisplay(
+              delay: Duration(seconds: initialDelay.inSeconds + 1),
+              child: Text(
+                "Ephraim Hammer",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.bold, fontSize: 34),
+              ),
+            ),
+            DelayedDisplay(
+              delay: Duration(seconds: initialDelay.inSeconds + 2),
+              child: Container(
+                height: 70,
+                width: 240,
+                child: RotateAnimatedTextKit(
+                    repeatForever: true,
+                    onTap: () {
+                      print("Tap Event");
+                    },
+                    text: [
+                      "Developer",
+                      "Ultra-runner",
+                      "Designer",
+                      'Explorer',
+                    ],
+                    textStyle: GoogleFonts.raleway(
+                      fontSize: 26,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center),
+              ),
+            ),
+            DelayedDisplay(
+              delay: Duration(seconds: initialDelay.inSeconds + 3),
+              child: ButtonBar(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FlatButton.icon(
+                      onPressed: () {
+                        js.context.callMethod(
+                            "open", ["https://github.com/ephammer/"]);
+                      },
+                      icon: Image.asset(
+                        'images/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png',
+                        height: 16,
+                        width: 16,
+                      ),
+                      label: Text(
+                        'GitHub',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      )),
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    onPressed: () {
+                      sendEmail();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Contact Me"),
+                    ),
+                    color: Colors.blue,
+                  )
+                ],
+              ),
+            ),
+            DelayedDisplay(
+              delay: Duration(seconds: initialDelay.inSeconds + 4),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 200,
+                  child: RaisedButton(
+                    color: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    onPressed: () {
+                      js.context.callMethod("open", ["https://kosherscan.app"]);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "My Latest Project",
+                          style: TextStyle(color: Colors.white),
+                        ),
 //                      Padding(
 //                        padding: const EdgeInsets.all(8.0),
 //                        child: Icon(Icons.arrow_forward_ios,color: Colors.black45,),
 //                      ),
-                    ],
-                  ),
+                      ],
+                    ),
 //              color: Colors.white,
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -162,16 +210,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _profilePicWidget(bool isDesktop) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-          height: (isDesktop) ? 300 : 100,
-          width: (isDesktop) ? 300 : 100,
-          decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              image: new DecorationImage(
-                  fit: BoxFit.cover,
-                  image: new AssetImage('images/profilpic_transparent.png')))),
+    return DelayedDisplay(
+      delay: Duration(
+          seconds:
+              isDesktop ? initialDelay.inSeconds + 5 : initialDelay.inSeconds),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+            height: (isDesktop) ? 300 : 100,
+            width: (isDesktop) ? 300 : 100,
+            decoration: new BoxDecoration(
+                shape: BoxShape.circle,
+                image: new DecorationImage(
+                    fit: BoxFit.cover,
+                    image:
+                        new AssetImage('images/profilpic_transparent.png')))),
+      ),
     );
   }
 
@@ -241,11 +295,25 @@ class _MyHomePageState extends State<MyHomePage> {
         _getTitleWidget("Projects", isDesktop, context),
         Expanded(
           child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: (MediaQuery.of(context).size.width) / 4),
-              child: ListView(
-                children: Projects().getProjectList(),
-              )),
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.symmetric(
+                horizontal: (MediaQuery.of(context).size.width) / 4),
+            // child: ListView(
+            //   children: Projects().getProjectList(),
+            // ),
+            child: LiveList(
+              showItemInterval: Duration(milliseconds: 150),
+              showItemDuration: Duration(milliseconds: 350),
+              padding: EdgeInsets.all(0),
+              reAnimateOnVisibility: true,
+              scrollDirection: Axis.vertical,
+              itemCount: Projects().getProjectList().length,
+              itemBuilder: animationItemBuilder(
+                (index) => Projects().getProjectList()[index],
+                // padding: EdgeInsets.symmetric(vertical: 8),
+              ),
+            ),
+          ),
         ),
         Align(
             alignment: Alignment.bottomCenter,
@@ -285,7 +353,22 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _getTitleWidget("Contact", isDesktop, context),
+              // _getTitleWidget("Contact", isDesktop, context),
+              SizedBox(
+                width: 250.0,
+                child: TypewriterAnimatedTextKit(
+                  // repeatForever: false,
+                  // totalRepeatCount: 1,
+                  speed: Duration(milliseconds: 240),
+                  pause: Duration(milliseconds: 2000),
+                  // onTap: () {
+                  //   print("Tap Event");
+                  // },
+                  text: ['Contact'],
+                  textStyle: TextStyle(fontSize: 30.0, fontFamily: "Agne"),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Container(
                   padding: EdgeInsets.symmetric(
                       horizontal: (MediaQuery.of(context).size.width) / 4),
@@ -341,15 +424,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _bodyElements(bool isDesktop) {
     List<Widget> pageElements = [];
 
-    pageElements.add(Column(
-      children: [
-        Center(
-          child: _profilePicWidget(isDesktop),
-        ),
-        _nameWidget(context),
-      ],
-    ));
-
+    pageElements.add(
+      Column(
+        children: [
+          Center(
+            child: _profilePicWidget(isDesktop),
+          ),
+          _nameWidget(context),
+        ],
+      ),
+    );
     // Add Projects
     pageElements.add(_getTitleWidget("Projects", isDesktop, context));
 
@@ -361,7 +445,22 @@ class _MyHomePageState extends State<MyHomePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _getTitleWidget("Contact", isDesktop, context),
+        // _getTitleWidget("Contact", isDesktop, context),
+        SizedBox(
+          width: 250.0,
+          child: TypewriterAnimatedTextKit(
+            // repeatForever: false,
+            // totalRepeatCount: 1,
+            speed: Duration(milliseconds: 240),
+            pause: Duration(milliseconds: 2000),
+            // onTap: () {
+            //   print("Tap Event");
+            // },
+            text: ['Contact'],
+            textStyle: TextStyle(fontSize: 30.0, fontFamily: "Agne"),
+            textAlign: TextAlign.center,
+          ),
+        ),
         ButtonBar(
           alignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -403,25 +502,61 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _body(bool isDesktop, BuildContext context) {
+    var list = _bodyElements(isDesktop);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(
         physics: BouncingScrollPhysics(),
-        children: _bodyElements(isDesktop),
+        children: list,
       ),
+      // child: LiveList(
+      //   showItemInterval: Duration(milliseconds: 150),
+      //   showItemDuration: Duration(milliseconds: 350),
+      //   padding: EdgeInsets.all(0),
+      //   reAnimateOnVisibility: true,
+      //   scrollDirection: Axis.vertical,
+      //   itemCount: list.length,
+      //   itemBuilder: animationItemBuilder(
+      //     (index) => list[index],
+      //     // padding: EdgeInsets.symmetric(vertical: 8),
+      //   ),
+      // ),
     );
   }
 
   Widget _bodyPage(bool isDesktop, BuildContext context) {
     _pageController = PageController();
-    return PageView.builder(
-      controller: _pageController,
-      physics: BouncingScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      itemCount: _bodyPageElements(isDesktop).length,
-      itemBuilder: (BuildContext context, int itemIndex) {
-        return _bodyPageElements(isDesktop)[itemIndex];
-      },
+    return Row(
+      children: [
+        Expanded(
+          child: PageView.builder(
+            controller: _pageController,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: _bodyPageElements(isDesktop).length,
+            itemBuilder: (BuildContext context, int itemIndex) {
+              return _bodyPageElements(isDesktop)[itemIndex];
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SmoothPageIndicator(
+            axisDirection: Axis.vertical,
+            controller: _pageController,
+            count: _bodyPageElements(isDesktop).length,
+            effect: WormEffect(
+              activeDotColor: Colors.red[800],
+              radius: 8,
+              dotHeight: 8,
+              dotWidth: 8,
+            ),
+            onDotClicked: (index) {
+              _pageController.jumpToPage(index);
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -446,14 +581,15 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 1,
         actions: [
           Center(
-              child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "בס״ד",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.rubik(),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "בס״ד",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.rubik(),
+              ),
             ),
-          )),
+          ),
         ],
       ),
       body: (isDesktop)

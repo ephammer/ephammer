@@ -29,7 +29,11 @@ dev_dependencies:
     sdk: flutter
   google_fonts:
   url_launcher:
-
+  smooth_page_indicator:
+  animated_text_kit: ^3.1.2
+  timelines: ^0.0.2+1
+  auto_animated: ^3.0.0
+  delayed_display: ^2.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
